@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initHeartBounce();
   initProgressBar();
   initFunFact();
+  initNewsletter();
 });
 
 /* =====================================================
@@ -547,6 +548,34 @@ function initFunFact() {
   funFactElement.innerHTML = `<p>${funFacts[factIndex]}</p>`;
 }
 
+function initNewsletter() {
+  const form = document.getElementById('newsletterForm');
+  const messageDiv = document.getElementById('newsletterMessage');
+  
+  if (!form || !messageDiv) return;
+  
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = form.querySelector('input[type="email"]').value;
+    
+    // Simulate API call
+    messageDiv.textContent = 'Subscribing...';
+    messageDiv.style.color = 'var(--gold-light)';
+    
+    setTimeout(() => {
+      // Success message
+      messageDiv.textContent = 'Thank you for subscribing! Check your email for confirmation.';
+      messageDiv.style.color = 'var(--success)';
+      form.reset();
+      
+      // Clear message after 5 seconds
+      setTimeout(() => {
+        messageDiv.textContent = '';
+      }, 5000);
+    }, 1000);
+  });
+}
+
 /* =====================================================
    Utility Functions
    ===================================================== */
@@ -571,5 +600,6 @@ window.LibraryApp = {
   initBookRain,
   initHeartBounce,
   initProgressBar,
-  initFunFact
+  initFunFact,
+  initNewsletter
 };

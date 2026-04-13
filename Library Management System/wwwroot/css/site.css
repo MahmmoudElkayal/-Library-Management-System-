@@ -269,13 +269,21 @@ textarea:focus {
 
 /* Search Bar */
 .search-bar {
-  width: 250px;
+  width: 350px;
+}
+
+.search-bar .input-group-text {
+  border: 2px solid var(--gray-300);
+  border-right: none;
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+  background-color: transparent;
+  color: var(--gray-500);
 }
 
 .search-bar .form-control {
   border: 2px solid var(--gray-300);
+  border-left: none;
   border-right: none;
-  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
   padding: var(--spacing-sm) var(--spacing-md);
   transition: all var(--transition-fast);
 }
@@ -287,7 +295,13 @@ textarea:focus {
 
 .search-bar .btn {
   border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-lg);
+}
+
+/* Search form */
+.search-form {
+  flex: 1;
+  max-width: 400px;
 }
 
 /* Buttons */
@@ -540,7 +554,7 @@ textarea:focus {
 }
 
 .book-card:hover {
-  transform: translateY(-10px);
+  transform: translateY(-5px);
   box-shadow: var(--shadow-xl);
 }
 
@@ -609,6 +623,34 @@ textarea:focus {
   display: flex;
   gap: var(--spacing-xs);
   flex-wrap: wrap;
+}
+
+.book-card-image .book-card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.book-card:hover .book-card-image .book-card-overlay {
+  opacity: 1;
+}
+
+.book-card-image .book-card-overlay .btn {
+  transform: translateY(20px);
+  transition: transform var(--transition-fast);
+}
+
+.book-card:hover .book-card-image .book-card-overlay .btn {
+  transform: translateY(0);
 }
 
 .carousel-controls {
@@ -750,6 +792,38 @@ textarea:focus {
   padding: var(--spacing-lg);
   border-radius: var(--radius-lg);
   border-left: 4px solid var(--gold);
+}
+
+.contact-info {
+  font-size: 0.95rem;
+}
+
+.contact-info p {
+  margin-bottom: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  opacity: 0.9;
+}
+
+.newsletter-form .form-control {
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+}
+
+.newsletter-form .btn {
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+}
+
+.newsletter-message {
+  font-size: 0.85rem;
+  margin-top: var(--spacing-sm);
+  color: var(--gold-light);
+}
+
+.fun-fact-compact .fun-fact {
+  padding: var(--spacing-md);
+  font-size: 0.9rem;
+  border-left-width: 3px;
 }
 
 .footer-bottom {

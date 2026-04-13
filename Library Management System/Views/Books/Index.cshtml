@@ -12,7 +12,7 @@
     @foreach (var book in Model)
     {
         <div class="col">
-            <div class="book-card h-100">
+            <div class="book-card h-100" data-book-id="@book.Id">
                 <div class="book-card-image">
                     @if (!string.IsNullOrEmpty(book.CoverImage))
                     {
@@ -25,6 +25,11 @@
                             <span>No Cover</span>
                         </div>
                     }
+                    <div class="book-card-overlay">
+                        <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" class="btn btn-primary btn-sm">
+                            <i class="fas fa-eye"></i> View Details
+                        </a>
+                    </div>
                 </div>
                 <div class="book-card-content">
                     <h5 class="book-card-title">@book.Title</h5>
@@ -36,7 +41,6 @@
                     @if (User.IsInRole("Admin"))
                     {
                         <div class="book-card-actions mt-3">
-                            <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" class="btn btn-primary btn-sm">Details</a>
                             <a asp-controller="Books" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-warning btn-sm">Edit</a>
                             <form method="post" asp-controller="Books" asp-action="Delete" asp-route-id="@book.Id" class="d-inline" onsubmit="return confirm('Are you sure?')">
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>

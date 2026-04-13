@@ -58,12 +58,13 @@
                     <!-- Search and Actions -->
                     <div class="d-flex align-items-center gap-3">
                         <!-- Search bar -->
-                        <form class="d-none d-md-flex" asp-controller="Books" asp-action="Index" method="get">
+                        <form class="d-none d-md-flex search-form" asp-controller="Books" asp-action="Index" method="get">
                             <div class="input-group search-bar">
-                                <input type="text" name="searchString" class="form-control" placeholder="Search books..." aria-label="Search books">
-                                <button class="btn btn-primary" type="submit">
-                                    <i class="fas fa-search"></i>
-                                </button>
+                                <span class="input-group-text bg-transparent border-end-0">
+                                    <i class="fas fa-search text-muted"></i>
+                                </span>
+                                <input type="text" name="searchString" class="form-control border-start-0" placeholder="Search books, authors, categories..." aria-label="Search books">
+                                <button class="btn btn-primary" type="submit">Search</button>
                             </div>
                         </form>
                         
@@ -183,7 +184,7 @@
                     <h3 class="footer-title">
                         <span class="logo-icon">📚</span> Library
                     </h3>
-                    <p class="footer-description">Your community hub for knowledge, discovery, and connection.</p>
+                    <p class="footer-description">Your community hub for knowledge, discovery, and connection. Visit us to explore our collection and join community events.</p>
                     
                     <!-- Social Links -->
                     <div class="social-links">
@@ -191,16 +192,25 @@
                         <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
                         <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
                 
-                <!-- Library Hours -->
+                <!-- Contact Us -->
                 <div class="footer-section">
-                    <h4 class="footer-subtitle">Library Hours</h4>
+                    <h4 class="footer-subtitle">
+                        <i class="fas fa-map-marker-alt"></i> Contact Us
+                    </h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-building"></i> 123 Library Street, Book City, BC 12345</p>
+                        <p><i class="fas fa-phone"></i> (555) 123-4567</p>
+                        <p><i class="fas fa-envelope"></i> info@library.org</p>
+                    </div>
+                    <h5 class="footer-subtitle mt-3">Library Hours</h5>
                     <ul class="hours-list">
-                        <li><strong>Monday - Friday:</strong> 9:00 AM - 8:00 PM</li>
-                        <li><strong>Saturday:</strong> 10:00 AM - 6:00 PM</li>
-                        <li><strong>Sunday:</strong> 12:00 PM - 5:00 PM</li>
+                        <li><strong>Mon-Fri:</strong> 9 AM - 8 PM</li>
+                        <li><strong>Sat:</strong> 10 AM - 6 PM</li>
+                        <li><strong>Sun:</strong> 12 PM - 5 PM</li>
                     </ul>
                 </div>
                 
@@ -208,21 +218,37 @@
                 <div class="footer-section">
                     <h4 class="footer-subtitle">Quick Links</h4>
                     <ul class="footer-links">
-                        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li><a asp-controller="Books" asp-action="Index">Catalog</a></li>
-                        <li><a asp-controller="Home" asp-action="Index">Events</a></li>
-                        <li><a asp-controller="Home" asp-action="Index">About Us</a></li>
-                        <li><a asp-controller="Home" asp-action="Index">Contact</a></li>
+                        <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a asp-controller="Books" asp-action="Index"><i class="fas fa-book"></i> Catalog</a></li>
+                        <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-calendar"></i> Events</a></li>
+                        <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-info-circle"></i> About Us</a></li>
+                        <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-question-circle"></i> FAQ</a></li>
+                        <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-hand-holding-heart"></i> Support</a></li>
                     </ul>
                 </div>
                 
-                <!-- Fun Fact -->
+                <!-- Newsletter Signup -->
                 <div class="footer-section">
                     <h4 class="footer-subtitle">
-                        <i class="fas fa-lightbulb"></i> Daily Fun Fact
+                        <i class="fas fa-envelope-open-text"></i> Newsletter
                     </h4>
-                    <div class="fun-fact" id="funFact">
-                        <p>Loading fun fact...</p>
+                    <p class="footer-description">Subscribe to receive updates on new books, events, and library news.</p>
+                    <form id="newsletterForm" class="newsletter-form">
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control" placeholder="Your email address" aria-label="Email address" required>
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        <div id="newsletterMessage" class="newsletter-message"></div>
+                    </form>
+                    
+                    <!-- Daily Fun Fact (compact) -->
+                    <div class="fun-fact-compact mt-4">
+                        <h5 class="footer-subtitle"><i class="fas fa-lightbulb"></i> Daily Fact</h5>
+                        <div class="fun-fact" id="funFact">
+                            <p>Loading fun fact...</p>
+                        </div>
                     </div>
                 </div>
             </div>
