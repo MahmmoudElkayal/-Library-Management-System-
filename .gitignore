@@ -1,0 +1,56 @@
+## .gitignore for ASP.NET Core MVC Project
+
+# Build results
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# AI tools
+.qwen/
+.aider*
+.copilot/
+.cursor/
+
+# IDE
+.idea/
+*.swp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment
+appsettings.Development.json
+appsettings.Local.json
+
+# Migrations (keep these - they're part of the project)
+# LibraryManagementSystem/Migrations/
+
+# wwwroot uploads (user content)
+wwwroot/images/books/*.jpg
+wwwroot/images/books/*.png
+wwwroot/images/members/*.jpg
+wwwroot/images/members/*.png
+
+# NuGet
+*.nupkg
+**/[Pp]ackages/**
+!**/[Pp]ackages/build/
+
+# Style guide (documentation only)
+STYLE_GUIDE.md
+CHANGELOG.md

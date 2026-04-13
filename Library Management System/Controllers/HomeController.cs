@@ -21,6 +21,11 @@ namespace LibraryManagementSystem.Controllers
             return View(books);
         }
 
+        public IActionResult Location()
+        {
+            return View();
+        }
+
         [Authorize(Roles = "Admin")]
         public IActionResult Dashboard()
         {

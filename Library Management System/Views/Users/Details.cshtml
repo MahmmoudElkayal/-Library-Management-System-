@@ -1,0 +1,124 @@
+@model UserDetailsViewModel
+@{ ViewData["Title"] = $"Member: {Model.UserName}"; }
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                @if (!string.IsNullOrEmpty(Model.ProfileImage))
+                {
+                    <img src="~/images/members/@Model.ProfileImage" alt="@Model.UserName" class="rounded-circle mb-3" style="width:120px;height:120px;object-fit:cover;" />
+                }
+                else
+                {
+                    <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width:120px;height:120px;">
+                        <i class="fas fa-user fa-3x"></i>
+                    </div>
+                }
+                <h4>@Model.UserName</h4>
+                <p class="text-muted">@Model.Email</p>
+                @foreach (var role in Model.Roles)
+                {
+                    <span class="badge bg-primary">@role</span>
+                }
+                @if (!string.IsNullOrEmpty(Model.Address))
+                {
+                    <p class="mt-2"><i class="fas fa-map-marker-alt"></i> @Model.Address</p>
+                }
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-body">
+                <h6>Summary</h6>
+                <table class="table table-sm">
+                    <tr><td>Total Borrows</td><td><strong>@Model.BorrowRecords.Count</strong></td></tr>
+                    <tr><td>Active / Overdue</td><td><strong>@Model.BorrowRecords.Count(br => br.Status == "Borrowed" || br.Status == "Overdue")</strong></td></tr>
+                    <tr><td>Pending Requests</td><td><strong>@Model.BorrowRecords.Count(br => br.Status == "Pending")</strong></td></tr>
+                    <tr><td>Unpaid Fines</td><td><strong class="text-danger">@Model.TotalFines.ToString("C")</strong></td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <h4><i class="fas fa-book"></i> Borrow History</h4>
+        @if (Model.BorrowRecords.Any())
+        {
+            <table class="table table-bordered table-hover table-sm">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Book</th>
+                        <th>Requested</th>
+                        <th>Borrow Date</th>
+                        <th>Return Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var record in Model.BorrowRecords)
+                    {
+                        <tr>
+                            <td>@record.Book?.Title</td>
+                            <td>@record.RequestedDate.ToShortDateString()</td>
+                            <td>@(record.BorrowDate?.ToShortDateString() ?? "-")</td>
+                            <td>@(record.ReturnDate?.ToShortDateString() ?? "-")</td>
+                            <td>
+                                @switch (record.Status)
+                                {
+                                    case "Pending": <span class="badge bg-warning text-dark">Pending</span>; break;
+                                    case "Borrowed": <span class="badge bg-primary">Borrowed</span>; break;
+                                    case "Returned": <span class="badge bg-success">Returned</span>; break;
+                                    case "Overdue": <span class="badge bg-danger">Overdue</span>; break;
+                                    case "Rejected": <span class="badge bg-secondary">Rejected</span>; break;
+                                    default: <span class="badge bg-dark">@record.Status</span>; break;
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="alert alert-info">No borrow records for this member.</div>
+        }
+
+        @if (Model.Fines.Any())
+        {
+            <h4 class="mt-4"><i class="fas fa-dollar-sign"></i> Fines</h4>
+            <table class="table table-bordered table-hover table-sm">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Book</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var fine in Model.Fines)
+                    {
+                        <tr>
+                            <td>@fine.Amount.ToString("C")</td>
+                            <td>
+                                @if (fine.IsPaid)
+                                {
+                                    <span class="badge bg-success">Paid</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Unpaid</span>
+                                }
+                            </td>
+                            <td>#@fine.BorrowRecordId</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+        <a asp-controller="Users" asp-action="Index" class="btn btn-secondary mt-3">
+            <i class="fas fa-arrow-left"></i> Back to Members
+        </a>
+    </div>
+</div>

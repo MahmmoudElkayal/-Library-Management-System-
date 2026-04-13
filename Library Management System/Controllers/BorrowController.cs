@@ -13,9 +13,10 @@ namespace LibraryManagementSystem.Controllers
         private readonly IBorrowRepository borrowRepo;
         private readonly IBookRepository bookRepo;
         private readonly IFineRepository fineRepo;
+        private readonly INotificationRepository notificationRepo;
         private readonly UserManager<LibraryMember> userManager;
 
-        public BorrowController(IBorrowRepository borrowRepo, IBookRepository bookRepo, IFineRepository fineRepo, UserManager<LibraryMember> userManager)
+        public BorrowController(IBorrowRepository borrowRepo, IBookRepository bookRepo, IFineRepository fineRepo, INotificationRepository notificationRepo, UserManager<LibraryMember> userManager)
         {
             this.borrowRepo = borrowRepo;
             this.bookRepo = bookRepo;
@@ -47,11 +48,12 @@ namespace LibraryManagementSystem.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Member")]
-        public IActionResult RequestBook()
+        public IActionResult RequestBook(int? bookId)
         {
             BorrowRequestViewModel vm = new BorrowRequestViewModel
             {
-                Books = bookRepo.GetAll()
+                Books = bookRepo.GetAll(),
+                BookId = bookId ?? 0
             };
             return View("RequestBook", vm);
         }
@@ -106,11 +108,11 @@ namespace LibraryManagementSystem.Controllers
             BorrowApproveViewModel vm = new BorrowApproveViewModel
             {
                 Id = record.Id,
-                PickupDate = DateTime.Now
+                PickupDate = DateTime.Now,
+                BookTitle = record.Book?.Title,
+                MemberName = record.Member?.UserName,
+                RequestedDate = record.RequestedDate
             };
-            ViewBag.BookTitle = record.Book?.Title;
-            ViewBag.MemberName = record.Member?.UserName;
-            ViewBag.RequestedDate = record.RequestedDate;
             return View("Approve", vm);
         }
 
@@ -136,6 +138,19 @@ namespace LibraryManagementSystem.Controllers
                     record.Status = "Borrowed";
                     borrowRepo.Update(record);
                     borrowRepo.Save();
+
+                    var bookForNotif = bookRepo.GetById(record.BookId);
+                    notificationRepo.Add(new Notification
+                    {
+                        UserId = record.MemberId,
+                        Message = $"Your borrow request for \"{bookForNotif?.Title}\" has been approved! Pickup date: {vm.PickupDate:MMM dd, yyyy}.",
+                        Type = "Approval",
+                        IsRead = false,
+                        CreatedAt = DateTime.Now,
+                        BorrowRecordId = record.Id
+                    });
+                    notificationRepo.Save();
+
                     TempData["Success"] = "Borrow request approved successfully.";
                     return RedirectToAction("PendingRequests");
                 }
@@ -146,9 +161,12 @@ namespace LibraryManagementSystem.Controllers
             }
 
             BorrowRecord? r = borrowRepo.GetByIdWithDetails(vm.Id);
-            ViewBag.BookTitle = r?.Book?.Title;
-            ViewBag.MemberName = r?.Member?.UserName;
-            ViewBag.RequestedDate = r?.RequestedDate;
+            if (r != null)
+            {
+                vm.BookTitle = r.Book?.Title;
+                vm.MemberName = r.Member?.UserName;
+                vm.RequestedDate = r.RequestedDate;
+            }
             return View("Approve", vm);
         }
 
@@ -169,6 +187,19 @@ namespace LibraryManagementSystem.Controllers
             record.Status = "Rejected";
             borrowRepo.Update(record);
             borrowRepo.Save();
+
+            var bookForNotif = bookRepo.GetById(record.BookId);
+            notificationRepo.Add(new Notification
+            {
+                UserId = record.MemberId,
+                Message = $"Your borrow request for \"{bookForNotif?.Title}\" has been rejected.",
+                Type = "Rejection",
+                IsRead = false,
+                CreatedAt = DateTime.Now,
+                BorrowRecordId = record.Id
+            });
+            notificationRepo.Save();
+
             TempData["Success"] = "Borrow request rejected.";
             return RedirectToAction("PendingRequests");
         }

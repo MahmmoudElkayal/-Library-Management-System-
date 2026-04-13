@@ -64,17 +64,17 @@
         <div class="categories-grid">
             <a asp-controller="Books" asp-action="Index" asp-route-categoryId="1" class="category-card">
                 <div class="category-icon">
-                    <i class="fas fa-rocket"></i>
-                </div>
-                <h3>Fiction</h3>
-                <p>Immerse yourself in stories</p>
-            </a>
-            <a asp-controller="Books" asp-action="Index" asp-route-categoryId="2" class="category-card">
-                <div class="category-icon">
                     <i class="fas fa-flask"></i>
                 </div>
                 <h3>Science</h3>
                 <p>Explore the wonders of science</p>
+            </a>
+            <a asp-controller="Books" asp-action="Index" asp-route-categoryId="2" class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h3>Fiction</h3>
+                <p>Immerse yourself in stories</p>
             </a>
             <a asp-controller="Books" asp-action="Index" asp-route-categoryId="3" class="category-card">
                 <div class="category-icon">
@@ -83,12 +83,12 @@
                 <h3>History</h3>
                 <p>Learn from the past</p>
             </a>
-            <a asp-controller="Books" asp-action="Index" class="category-card">
+            <a asp-controller="Books" asp-action="Index" asp-route-categoryId="4" class="category-card">
                 <div class="category-icon">
-                    <i class="fas fa-ellipsis-h"></i>
+                    <i class="fas fa-laptop-code"></i>
                 </div>
-                <h3>All Categories</h3>
-                <p>Browse everything</p>
+                <h3>Technology</h3>
+                <p>IT and programming</p>
             </a>
         </div>
     </div>

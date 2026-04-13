@@ -10,5 +10,7 @@ namespace LibraryManagementSystem.Interfaces
         List<Book> GetBooksByCategory(int categoryId);
         List<Book> GetAvailableBooks();
         List<Book> GetRecentlyAdded(int count);
+        string GetAvailabilityStatus(int bookId);
+        Dictionary<int, string> GetAvailabilityStatuses();
     }
 }

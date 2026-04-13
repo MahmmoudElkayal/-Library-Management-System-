@@ -8,7 +8,10 @@ namespace LibraryManagementSystem.ViewModels
 
         [Required(ErrorMessage = "Pickup date is required")]
         [Display(Name = "Pickup Date")]
-        [DataType(DataType.DateTime)]
         public DateTime PickupDate { get; set; }
+
+        public string? BookTitle { get; set; }
+        public string? MemberName { get; set; }
+        public DateTime RequestedDate { get; set; }
     }
 }

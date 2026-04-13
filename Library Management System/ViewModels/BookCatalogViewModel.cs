@@ -22,5 +22,6 @@ namespace LibraryManagementSystem.ViewModels
         public int TotalPages => (int)Math.Ceiling(TotalBooks / (double)PageSize);
         public bool HasPreviousPage => CurrentPage > 1;
         public bool HasNextPage => CurrentPage < TotalPages;
+        public Dictionary<int, string> AvailabilityStatuses { get; set; } = new Dictionary<int, string>();
     }
 }

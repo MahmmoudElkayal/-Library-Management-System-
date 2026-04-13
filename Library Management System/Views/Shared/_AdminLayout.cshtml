@@ -161,13 +161,12 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Borrow" asp-action="Index">
                                 <i class="fas fa-exchange-alt"></i> Borrows
-                                <span class="admin-badge">5</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Borrow" asp-action="PendingRequests">
                                 <i class="fas fa-clock"></i> Pending
-                                <span class="admin-badge">3</span>
+                                @await Component.InvokeAsync("PendingRequestsCount")
                             </a>
                         </li>
                         <li class="nav-item">
@@ -175,10 +174,21 @@
                                 <i class="fas fa-dollar-sign"></i> Fines
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Users" asp-action="Index">
+                                <i class="fas fa-users"></i> Members
+                            </a>
+                        </li>
                     </ul>
                     
                     <!-- Right side actions -->
                     <div class="d-flex align-items-center gap-3">
+                        <!-- Notifications -->
+                        <a asp-controller="Notifications" asp-action="Index" class="btn btn-theme-toggle position-relative" title="Notifications">
+                            <i class="fas fa-bell"></i>
+                            @await Component.InvokeAsync("PendingRequestsCount")
+                        </a>
+                        
                         <!-- Dark mode toggle -->
                         <button type="button" class="btn btn-theme-toggle" id="themeToggle" title="Toggle dark/light mode">
                             <i class="fas fa-moon"></i>
@@ -228,13 +238,18 @@
                     </a>
                     <a class="nav-link" asp-controller="Borrow" asp-action="PendingRequests">
                         <i class="fas fa-clock"></i> Pending Requests
-                        <span class="admin-badge">3</span>
                     </a>
                     
                     <!-- Section: Fines -->
                     <div class="nav-section-title">💰 Financial</div>
                     <a class="nav-link" asp-controller="Fines" asp-action="Index">
                         <i class="fas fa-dollar-sign"></i> Manage Fines
+                    </a>
+
+                    <!-- Section: Members -->
+                    <div class="nav-section-title">👥 Members</div>
+                    <a class="nav-link" asp-controller="Users" asp-action="Index">
+                        <i class="fas fa-users"></i> Manage Members
                     </a>
                     
                     <!-- Section: System -->

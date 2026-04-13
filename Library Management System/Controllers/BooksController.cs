@@ -56,7 +56,8 @@ namespace LibraryManagementSystem.Controllers
                 TotalBooks = totalBooks,
                 AvailableBooks = availableBooks,
                 CurrentPage = page,
-                PageSize = 12
+                PageSize = 12,
+                AvailabilityStatuses = bookRepo.GetAvailabilityStatuses()
             };
 
             return View("Index", viewModel);
@@ -66,6 +67,8 @@ namespace LibraryManagementSystem.Controllers
         {
             Book? book = bookRepo.GetByIdWithDetails(id);
             if (book == null) return NotFound();
+
+            ViewBag.Availability = bookRepo.GetAvailabilityStatus(id);
             return View("Details", book);
         }
 

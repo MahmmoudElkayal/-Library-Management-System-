@@ -1,23 +1,104 @@
 @model Book
-@{ ViewData["Title"] = "Book Details"; }
+@{ ViewData["Title"] = Model.Title; }
 
-<h1>Book Details</h1>
-
-<table class="table table-bordered">
-    <tr><th>Cover</th><td>
+<div class="row">
+    <div class="col-md-4">
         @if (!string.IsNullOrEmpty(Model.CoverImage))
         {
-            <img src="~/images/books/@Model.CoverImage" alt="@Model.Title" style="width:120px;height:160px;object-fit:cover;" />
+            <img src="~/images/books/@Model.CoverImage" alt="@Model.Title" class="img-fluid rounded" style="max-height:400px;object-fit:cover;width:100%;" />
         }
         else
         {
-            <span class="text-muted">No image</span>
+            <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height:400px;">
+                <span class="text-muted fs-3"><i class="fas fa-book"></i> No Cover</span>
+            </div>
         }
-    </td></tr>
-    <tr><th>Title</th><td>@Model.Title</td></tr>
-    <tr><th>Author</th><td>@Model.Author?.Name</td></tr>
-    <tr><th>Category</th><td>@Model.Category?.Name</td></tr>
-    <tr><th>ISBN</th><td>@Model.ISBN</td></tr>
-</table>
+    </div>
+    <div class="col-md-8">
+        <h1>@Model.Title</h1>
+        <p class="text-muted fs-5">by <strong>@Model.Author?.Name</strong></p>
 
-<a asp-controller="Books" asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <div class="mb-3">
+            @switch (ViewBag.Availability as string)
+            {
+                case "Available":
+                    <span class="badge bg-success fs-6"><i class="fas fa-check-circle"></i> Available</span>
+                    break;
+                case "Borrowed":
+                    <span class="badge bg-primary fs-6"><i class="fas fa-book-reader"></i> Currently Borrowed</span>
+                    break;
+                case "Pending":
+                    <span class="badge bg-warning text-dark fs-6"><i class="fas fa-clock"></i> Pending Request</span>
+                    break;
+                case "Overdue":
+                    <span class="badge bg-danger fs-6"><i class="fas fa-exclamation-triangle"></i> Overdue</span>
+                    break;
+                default:
+                    <span class="badge bg-secondary fs-6">@ViewBag.Availability</span>
+                    break;
+            }
+        </div>
+
+        <table class="table">
+            <tr><th style="width:30%">Author</th><td>@Model.Author?.Name</td></tr>
+            <tr><th>Category</th><td><span class="badge bg-info">@Model.Category?.Name</span></td></tr>
+            <tr><th>ISBN</th><td>@(Model.ISBN ?? "N/A")</td></tr>
+        </table>
+
+        <div class="mt-3">
+            @if (User.IsInRole("Member"))
+            {
+                @if (ViewBag.Availability == "Available")
+                {
+                    <a asp-controller="Borrow" asp-action="RequestBook" asp-route-bookId="@Model.Id" class="btn btn-success btn-lg me-2">
+                        <i class="fas fa-hand-holding-heart"></i> Request to Borrow
+                    </a>
+                }
+                else if (ViewBag.Availability == "Borrowed")
+                {
+                    <button class="btn btn-outline-secondary btn-lg me-2" disabled>
+                        <i class="fas fa-clock"></i> Currently Unavailable
+                    </button>
+                    <p class="text-muted mt-2"><small>This book is currently borrowed. Check back later or request to be notified.</small></p>
+                }
+                else if (ViewBag.Availability == "Pending")
+                {
+                    <button class="btn btn-outline-warning btn-lg me-2" disabled>
+                        <i class="fas fa-hourglass-half"></i> Request Pending
+                    </button>
+                    <p class="text-muted mt-2"><small>Someone has already requested this book.</small></p>
+                }
+                else
+                {
+                    <a asp-controller="Borrow" asp-action="RequestBook" asp-route-bookId="@Model.Id" class="btn btn-success btn-lg me-2">
+                        <i class="fas fa-hand-holding-heart"></i> Request to Borrow
+                    </a>
+                }
+            }
+            else if (!User.Identity?.IsAuthenticated ?? true)
+            {
+                <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Url.Action("Details", "Books", new { id = Model.Id })" class="btn btn-primary btn-lg me-2">
+                    <i class="fas fa-sign-in-alt"></i> Sign In to Borrow
+                </a>
+                <a asp-controller="Account" asp-action="Register" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </a>
+            }
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <a asp-controller="Books" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger">
+                    <i class="fas fa-trash"></i> Delete
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-controller="Books" asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Catalog
+    </a>
+</div>

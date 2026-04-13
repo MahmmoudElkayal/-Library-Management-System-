@@ -1,0 +1,67 @@
+@model IEnumerable<UserListViewModel>
+@{ ViewData["Title"] = "Members"; }
+
+<h1><i class="fas fa-users"></i> Members Management</h1>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Profile</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Total Borrows</th>
+            <th>Active</th>
+            <th>Pending</th>
+            <th>Unpaid Fines</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(user.ProfileImage))
+                    {
+                        <img src="~/images/members/@user.ProfileImage" alt="@user.UserName" style="width:40px;height:40px;border-radius:50%;object-fit:cover;" />
+                    }
+                    else
+                    {
+                        <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" style="width:40px;height:40px;">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    }
+                </td>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td><span class="badge bg-info">@user.TotalBorrows</span></td>
+                <td><span class="badge bg-primary">@user.ActiveBorrows</span></td>
+                <td>
+                    @if (user.PendingRequests > 0)
+                    {
+                        <span class="badge bg-warning text-dark">@user.PendingRequests</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-light text-dark">0</span>
+                    }
+                </td>
+                <td>
+                    @if (user.UnpaidFines > 0)
+                    {
+                        <span class="badge bg-danger">@user.UnpaidFines</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-light text-dark">0</span>
+                    }
+                </td>
+                <td>
+                    <a asp-controller="Users" asp-action="Details" asp-route-id="@user.Id" class="btn btn-primary btn-sm">
+                        <i class="fas fa-eye"></i> Details
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

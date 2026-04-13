@@ -97,5 +97,39 @@ namespace LibraryManagementSystem.Repositories
                 .Take(count)
                 .ToList();
         }
+
+        public string GetAvailabilityStatus(int bookId)
+        {
+            var activeBorrow = context.BorrowRecords
+                .FirstOrDefault(br => br.BookId == bookId && (br.Status == "Borrowed" || br.Status == "Pending"));
+            if (activeBorrow != null)
+            {
+                return activeBorrow.Status;
+            }
+            return "Available";
+        }
+
+        public Dictionary<int, string> GetAvailabilityStatuses()
+        {
+            var statuses = new Dictionary<int, string>();
+            var activeBorrows = context.BorrowRecords
+                .Where(br => br.Status == "Borrowed" || br.Status == "Pending" || br.Status == "Overdue")
+                .ToList();
+
+            foreach (var book in context.Books)
+            {
+                var borrow = activeBorrows.FirstOrDefault(br => br.BookId == book.Id);
+                if (borrow != null)
+                {
+                    statuses[book.Id] = borrow.Status;
+                }
+                else
+                {
+                    statuses[book.Id] = "Available";
+                }
+            }
+
+            return statuses;
+        }
     }
 }

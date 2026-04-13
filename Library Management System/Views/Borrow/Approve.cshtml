@@ -7,14 +7,17 @@
     <div class="col-md-6">
         <div class="card mb-3">
             <div class="card-body">
-                <p><strong>Book:</strong> @ViewBag.BookTitle</p>
-                <p><strong>Member:</strong> @ViewBag.MemberName</p>
-                <p><strong>Requested:</strong> @ViewBag.RequestedDate</p>
+                <p><strong>Book:</strong> @Model.BookTitle</p>
+                <p><strong>Member:</strong> @Model.MemberName</p>
+                <p><strong>Requested:</strong> @Model.RequestedDate.ToShortDateString()</p>
             </div>
         </div>
 
         <form method="post" asp-controller="Borrow" asp-action="Approve">
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="BookTitle" />
+            <input type="hidden" asp-for="MemberName" />
+            <input type="hidden" asp-for="RequestedDate" />
             <div asp-validation-summary="All" class="text-danger"></div>
 
             <div class="mb-3">

@@ -4,6 +4,7 @@ using LibraryManagementSystem.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryManagementSystem.Migrations
 {
     [DbContext(typeof(LibraryDbContext))]
-    partial class LibraryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260413194041_SeedBooksData")]
+    partial class SeedBooksData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,48 +68,6 @@ namespace LibraryManagementSystem.Migrations
                             Id = 4,
                             Bio = "Software architect and technical author",
                             Name = "Andrew Troelsen"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Bio = "American novelist of the Jazz Age",
-                            Name = "F. Scott Fitzgerald"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Bio = "American novelist best known for To Kill a Mockingbird",
-                            Name = "Harper Lee"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Bio = "Lebanese-American writer, poet and visual artist",
-                            Name = "Kahlil Gibran"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Bio = "Afghan-American novelist and physician",
-                            Name = "Khaled Hosseini"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Bio = "Sudanese novelist and journalist",
-                            Name = "الطيب صالح (Tayeb Salih)"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Bio = "Palestinian writer and political activist",
-                            Name = "غسان كنفاني (Ghassan Kanafani)"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Bio = "Egyptian novelist, Nobel Prize laureate in Literature 1988",
-                            Name = "نجيب محفوظ (Naguib Mahfouz)"
                         });
                 });
 
@@ -148,7 +109,7 @@ namespace LibraryManagementSystem.Migrations
                             Id = 1,
                             AuthorId = 1,
                             CategoryId = 1,
-                            CoverImage = "brief-history.jpg",
+                            CoverImage = "/images/books/brief-history.jpg",
                             ISBN = "978-0553380163",
                             Title = "A Brief History of Time"
                         },
@@ -157,7 +118,7 @@ namespace LibraryManagementSystem.Migrations
                             Id = 2,
                             AuthorId = 1,
                             CategoryId = 1,
-                            CoverImage = "universe-nutshell.jpg",
+                            CoverImage = "/images/books/universe-nutshell.jpg",
                             ISBN = "978-0553802023",
                             Title = "The Universe in a Nutshell"
                         },
@@ -166,7 +127,7 @@ namespace LibraryManagementSystem.Migrations
                             Id = 3,
                             AuthorId = 2,
                             CategoryId = 2,
-                            CoverImage = "hp-stone.jpg",
+                            CoverImage = "/images/books/hp-stone.jpg",
                             ISBN = "978-0590353427",
                             Title = "Harry Potter and the Sorcerer's Stone"
                         },
@@ -175,7 +136,7 @@ namespace LibraryManagementSystem.Migrations
                             Id = 4,
                             AuthorId = 2,
                             CategoryId = 2,
-                            CoverImage = "hp-chamber.jpg",
+                            CoverImage = "/images/books/hp-chamber.jpg",
                             ISBN = "978-0439064873",
                             Title = "Harry Potter and the Chamber of Secrets"
                         },
@@ -184,7 +145,7 @@ namespace LibraryManagementSystem.Migrations
                             Id = 5,
                             AuthorId = 2,
                             CategoryId = 2,
-                            CoverImage = "hp-azkaban.jpg",
+                            CoverImage = "/images/books/hp-azkaban.jpg",
                             ISBN = "978-0439136365",
                             Title = "Harry Potter and the Prisoner of Azkaban"
                         },
@@ -193,7 +154,7 @@ namespace LibraryManagementSystem.Migrations
                             Id = 6,
                             AuthorId = 3,
                             CategoryId = 3,
-                            CoverImage = "sapiens.jpg",
+                            CoverImage = "/images/books/sapiens.jpg",
                             ISBN = "978-0062316097",
                             Title = "Sapiens: A Brief History of Humankind"
                         },
@@ -202,7 +163,7 @@ namespace LibraryManagementSystem.Migrations
                             Id = 7,
                             AuthorId = 3,
                             CategoryId = 3,
-                            CoverImage = "homo-deus.jpg",
+                            CoverImage = "/images/books/homo-deus.jpg",
                             ISBN = "978-0062464316",
                             Title = "Homo Deus: A Brief History of Tomorrow"
                         },
@@ -211,7 +172,7 @@ namespace LibraryManagementSystem.Migrations
                             Id = 8,
                             AuthorId = 3,
                             CategoryId = 3,
-                            CoverImage = "21-lessons.jpg",
+                            CoverImage = "/images/books/21-lessons.jpg",
                             ISBN = "978-0525512172",
                             Title = "21 Lessons for the 21st Century"
                         },
@@ -220,7 +181,7 @@ namespace LibraryManagementSystem.Migrations
                             Id = 9,
                             AuthorId = 4,
                             CategoryId = 4,
-                            CoverImage = "pro-csharp.jpg",
+                            CoverImage = "/images/books/pro-csharp.jpg",
                             ISBN = "978-1484273616",
                             Title = "Pro C# 10 with .NET 6"
                         },
@@ -229,72 +190,9 @@ namespace LibraryManagementSystem.Migrations
                             Id = 10,
                             AuthorId = 4,
                             CategoryId = 4,
-                            CoverImage = "dotnet-platform.jpg",
+                            CoverImage = "/images/books/dotnet-platform.jpg",
                             ISBN = "978-1590590558",
                             Title = "C# and the .NET Platform"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            AuthorId = 5,
-                            CategoryId = 2,
-                            CoverImage = "great-gatsby.jpg",
-                            ISBN = "978-0743273565",
-                            Title = "The Great Gatsby"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            AuthorId = 6,
-                            CategoryId = 2,
-                            CoverImage = "mockingbird.jpg",
-                            ISBN = "978-0061120084",
-                            Title = "To Kill a Mockingbird"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            AuthorId = 7,
-                            CategoryId = 5,
-                            CoverImage = "prophet.jpg",
-                            ISBN = "978-0394404288",
-                            Title = "The Prophet"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            AuthorId = 8,
-                            CategoryId = 2,
-                            CoverImage = "kite-runner.jpg",
-                            ISBN = "978-1594631931",
-                            Title = "The Kite Runner"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            AuthorId = 9,
-                            CategoryId = 2,
-                            CoverImage = "season-migration.jpg",
-                            ISBN = "978-0141190600",
-                            Title = "موسم الهجرة إلى الشمال"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            AuthorId = 10,
-                            CategoryId = 2,
-                            CoverImage = "men-in-sun.jpg",
-                            ISBN = "978-0894107627",
-                            Title = "رجال في الشمس"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            AuthorId = 11,
-                            CategoryId = 2,
-                            CoverImage = "midaq-alley.jpg",
-                            ISBN = "978-9774160615",
-                            Title = "زقاق المدق"
                         });
                 });
 
@@ -378,12 +276,6 @@ namespace LibraryManagementSystem.Migrations
                             Id = 4,
                             Description = "IT and programming books",
                             Name = "Technology"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Description = "Classic and contemporary world literature",
-                            Name = "Literature"
                         });
                 });
 
@@ -486,42 +378,6 @@ namespace LibraryManagementSystem.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("LibraryManagementSystem.Models.Notification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("BorrowRecordId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -712,17 +568,6 @@ namespace LibraryManagementSystem.Migrations
                     b.Navigation("BorrowRecord");
 
                     b.Navigation("Member");
-                });
-
-            modelBuilder.Entity("LibraryManagementSystem.Models.Notification", b =>
-                {
-                    b.HasOne("LibraryManagementSystem.Models.LibraryMember", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
