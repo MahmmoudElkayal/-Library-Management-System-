@@ -5,21 +5,43 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
-        <a class="nav-link" asp-controller="Member" asp-action="Profile">Hello, @User.Identity?.Name</a>
-    </li>
-    <li class="nav-item">
-        <form method="post" asp-controller="Account" asp-action="Logout">
-            <button type="submit" class="nav-link btn btn-link text-light" style="border:none;padding:0;">Logout</button>
-        </form>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-user-circle"></i>
+            Hello, @User.Identity?.Name
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li>
+                <a class="dropdown-item" asp-controller="Member" asp-action="Profile">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" asp-controller="Borrow" asp-action="MyBorrows">
+                    <i class="fas fa-book"></i> My Borrows
+                </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <form method="post" asp-controller="Account" asp-action="Logout">
+                    <button type="submit" class="dropdown-item">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </form>
+            </li>
+        </ul>
     </li>
 }
 else
 {
     <li class="nav-item">
-        <a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
+        <a class="nav-link" asp-controller="Account" asp-action="Register">
+            <i class="fas fa-user-plus"></i> Register
+        </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+        <a class="nav-link" asp-controller="Account" asp-action="Login">
+            <i class="fas fa-sign-in-alt"></i> Login
+        </a>
     </li>
 }

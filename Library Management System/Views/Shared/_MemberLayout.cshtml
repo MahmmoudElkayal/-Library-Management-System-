@@ -4,66 +4,243 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Library Management System</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
-        <div class="container">
-            <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
-                <span class="text-white">📚 Library</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#memberNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="memberNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="Books" asp-action="Index">Browse Books</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="Borrow" asp-action="RequestBook">Request Book</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="Borrow" asp-action="MyBorrows">My Borrows</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav">
-                    @await Html.PartialAsync("_LoginPartial")
-                </ul>
+<body class="light-mode">
+    <!-- Header -->
+    <header class="site-header">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <!-- Logo -->
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                    <span class="logo-icon">📚</span>
+                    <span class="logo-text">Library</span>
+                </a>
+                
+                <!-- Mobile toggle -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#memberNav" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <!-- Navigation -->
+                <div class="collapse navbar-collapse" id="memberNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Books" asp-action="Index">
+                                <i class="fas fa-book-open"></i> Catalog
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-calendar-alt"></i> Events
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Member" asp-action="Profile">
+                                <i class="fas fa-user"></i> My Account
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <!-- Search and Actions -->
+                    <div class="d-flex align-items-center gap-3">
+                        <!-- Search bar -->
+                        <form class="d-none d-md-flex" asp-controller="Books" asp-action="Index" method="get">
+                            <div class="input-group search-bar">
+                                <input type="text" name="searchString" class="form-control" placeholder="Search books..." aria-label="Search books">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <!-- Surprise me button -->
+                        <button type="button" class="btn btn-surprise" id="surpriseMeBtn" title="Get a random book recommendation">
+                            <i class="fas fa-magic"></i> Surprise me!
+                        </button>
+                        
+                        <!-- Dark mode toggle -->
+                        <button type="button" class="btn btn-theme-toggle" id="themeToggle" title="Toggle dark/light mode">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        
+                        <!-- Login partial -->
+                        <ul class="navbar-nav">
+                            @await Html.PartialAsync("_LoginPartial")
+                        </ul>
+                    </div>
+                </div>
             </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section (only on homepage) -->
+    @if (ViewData["Title"]?.ToString() == "Home Page")
+    {
+        <section class="hero-section">
+            <div class="hero-background"></div>
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">Discover Your Next Adventure</h1>
+                    <p class="hero-subtitle">Explore thousands of books, join community events, and connect with fellow readers.</p>
+                    
+                    <!-- Rotating quotes -->
+                    <div class="reading-quotes">
+                        <div class="quote-container">
+                            <i class="fas fa-quote-left quote-icon"></i>
+                            <p class="quote-text" id="quoteText">A reader lives a thousand lives before he dies. The man who never reads lives only one.</p>
+                            <p class="quote-author" id="quoteAuthor">- George R.R. Martin</p>
+                        </div>
+                    </div>
+                    
+                    <div class="hero-actions">
+                        <a asp-controller="Books" asp-action="Index" class="btn btn-primary btn-lg">
+                            <i class="fas fa-book"></i> Browse Catalog
+                        </a>
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-calendar"></i> View Events
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container py-4">
+            <!-- Alerts -->
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["Success"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["Error"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            
+            @RenderBody()
         </div>
-    </nav>
+    </main>
 
-    <div class="container mt-4">
-        @if (TempData["Success"] != null)
-        {
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                @TempData["Success"]
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <!-- Staff Picks Carousel (only on homepage) -->
+    @if (ViewData["Title"]?.ToString() == "Home Page")
+    {
+        <section class="staff-picks-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-star"></i> Staff Picks
+                    </h2>
+                    <p class="section-subtitle">Curated by our library team</p>
+                </div>
+                
+                <div class="staff-picks-carousel" id="staffPicksCarousel">
+                    <!-- Carousel items will be populated via JavaScript -->
+                    <div class="carousel-loading">
+                        <i class="fas fa-spinner fa-spin"></i> Loading picks...
+                    </div>
+                </div>
+                
+                <div class="carousel-controls">
+                    <button class="btn btn-control prev" id="prevPicks" aria-label="Previous picks">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="carousel-dots" id="carouselDots"></div>
+                    <button class="btn btn-control next" id="nextPicks" aria-label="Next picks">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
             </div>
-        }
-        @if (TempData["Error"] != null)
-        {
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                @TempData["Error"]
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </section>
+    }
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Library Info -->
+                <div class="footer-section">
+                    <h3 class="footer-title">
+                        <span class="logo-icon">📚</span> Library
+                    </h3>
+                    <p class="footer-description">Your community hub for knowledge, discovery, and connection.</p>
+                    
+                    <!-- Social Links -->
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Library Hours -->
+                <div class="footer-section">
+                    <h4 class="footer-subtitle">Library Hours</h4>
+                    <ul class="hours-list">
+                        <li><strong>Monday - Friday:</strong> 9:00 AM - 8:00 PM</li>
+                        <li><strong>Saturday:</strong> 10:00 AM - 6:00 PM</li>
+                        <li><strong>Sunday:</strong> 12:00 PM - 5:00 PM</li>
+                    </ul>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="footer-section">
+                    <h4 class="footer-subtitle">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a asp-controller="Books" asp-action="Index">Catalog</a></li>
+                        <li><a asp-controller="Home" asp-action="Index">Events</a></li>
+                        <li><a asp-controller="Home" asp-action="Index">About Us</a></li>
+                        <li><a asp-controller="Home" asp-action="Index">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Fun Fact -->
+                <div class="footer-section">
+                    <h4 class="footer-subtitle">
+                        <i class="fas fa-lightbulb"></i> Daily Fun Fact
+                    </h4>
+                    <div class="fun-fact" id="funFact">
+                        <p>Loading fun fact...</p>
+                    </div>
+                </div>
             </div>
-        }
-
-        @RenderBody()
-    </div>
-
-    <footer class="border-top footer text-muted mt-5 py-3">
-        <div class="container text-center">
-            &copy; 2026 - Library Management System
+            
+            <!-- Copyright -->
+            <div class="footer-bottom">
+                <p>&copy; 2026 - Library Management System</p>
+                <p class="footer-credits">Designed with <i class="fas fa-heart"></i> for readers</p>
+            </div>
         </div>
     </footer>
 
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
