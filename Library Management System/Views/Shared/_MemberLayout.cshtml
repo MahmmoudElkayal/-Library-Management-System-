@@ -44,6 +44,21 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" asp-controller="Borrow" asp-action="RequestBook">
+                                <i class="fas fa-hand-holding-heart"></i> Borrow
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Borrow" asp-action="MyBorrows">
+                                <i class="fas fa-list-check"></i> My Borrows
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Location">
+                                <i class="fas fa-map-marker-alt"></i> Visit
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" asp-controller="Home" asp-action="Index">
                                 <i class="fas fa-calendar-alt"></i> Events
                             </a>
@@ -77,6 +92,14 @@
                         <button type="button" class="btn btn-theme-toggle" id="themeToggle" title="Toggle dark/light mode">
                             <i class="fas fa-moon"></i>
                         </button>
+                        
+                        <!-- Notifications -->
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <a asp-controller="Notifications" asp-action="Index" class="btn btn-theme-toggle position-relative" title="Notifications">
+                                <i class="fas fa-bell"></i>
+                            </a>
+                        }
                         
                         <!-- Login partial -->
                         <ul class="navbar-nav">

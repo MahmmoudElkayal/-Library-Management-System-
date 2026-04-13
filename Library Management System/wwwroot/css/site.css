@@ -101,6 +101,30 @@
   --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
+/* Font Awesome Icon Fixes */
+.fas,
+.fab,
+.far,
+.fa-solid,
+.fa-brands,
+.fa-regular {
+  font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+  display: inline-block;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.fab,
+.fa-brands {
+  font-family: "Font Awesome 6 Brands";
+  font-weight: 400;
+}
+
 /* Base Styles */
 *,
 *::before,
@@ -309,6 +333,22 @@ textarea:focus {
   flex-wrap: nowrap;
 }
 
+/* Header Icon Buttons */
+.navbar .d-flex.align-items-center .btn-theme-toggle,
+.navbar .d-flex.align-items-center a.btn-theme-toggle {
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.navbar .d-flex.align-items-center .btn-theme-toggle i,
+.navbar .d-flex.align-items-center a.btn-theme-toggle i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
 /* Search Bar */
 .search-bar {
   width: 280px;
@@ -374,13 +414,43 @@ textarea:focus {
   border: none;
   width: 36px;
   height: 36px;
-  border-radius: var(--radius-full);
-  display: flex;
+  border-radius: 50%;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   transition: all var(--transition-fast);
   flex-shrink: 0;
   padding: 0;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.btn-theme-toggle i {
+  color: var(--gray-700);
+  font-size: 1rem;
+  line-height: 1;
+  display: inline-block;
+}
+
+.dark-mode .btn-theme-toggle {
+  background-color: var(--gray-300);
+  color: var(--gray-800);
+}
+
+.dark-mode .btn-theme-toggle i {
+  color: var(--gray-800);
+}
+
+.btn-theme-toggle:hover,
+.btn-theme-toggle:focus {
+  background-color: var(--gray-300);
+  transform: rotate(15deg);
+}
+
+.dark-mode .btn-theme-toggle:hover,
+.dark-mode .btn-theme-toggle:focus {
+  background-color: var(--gray-400);
 }
 
 /* Login Partial in Header */
@@ -390,6 +460,14 @@ textarea:focus {
 
 .navbar .navbar-nav:last-child .nav-link {
   padding: var(--spacing-xs) var(--spacing-sm) !important;
+}
+
+/* Nav Link Icons */
+.nav-link i {
+  color: inherit;
+  font-size: 0.9rem;
+  display: inline-block;
+  line-height: 1;
 }
 
 /* Buttons */
@@ -432,6 +510,9 @@ textarea:focus {
   color: var(--gray-900);
   border: none;
   font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-surprise:hover,
@@ -439,25 +520,6 @@ textarea:focus {
   background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 100%);
   transform: translateY(-2px) scale(1.05);
   box-shadow: var(--shadow-lg);
-}
-
-.btn-theme-toggle {
-  background-color: var(--gray-200);
-  color: var(--gray-700);
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-full);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition-fast);
-}
-
-.btn-theme-toggle:hover,
-.btn-theme-toggle:focus {
-  background-color: var(--gray-300);
-  transform: rotate(15deg);
 }
 
 /* =====================================================
