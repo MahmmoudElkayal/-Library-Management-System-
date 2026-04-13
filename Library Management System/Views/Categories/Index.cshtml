@@ -1,0 +1,33 @@
+@model IEnumerable<Category>
+@{ ViewData["Title"] = "Categories"; }
+
+<h1>Categories</h1>
+<a asp-controller="Categories" asp-action="Create" class="btn btn-success mb-3">+ Add New Category</a>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@category.Id</td>
+                <td>@category.Name</td>
+                <td>@category.Description</td>
+                <td>
+                    <a asp-controller="Categories" asp-action="Details" asp-route-id="@category.Id" class="btn btn-primary btn-sm">Details</a>
+                    <a asp-controller="Categories" asp-action="Edit" asp-route-id="@category.Id" class="btn btn-warning btn-sm">Edit</a>
+                    <form method="post" asp-controller="Categories" asp-action="Delete" asp-route-id="@category.Id" style="display:inline;" onsubmit="return confirm('Are you sure?')">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

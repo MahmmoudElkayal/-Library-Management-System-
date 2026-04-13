@@ -1,0 +1,78 @@
+@model IEnumerable<BorrowRecord>
+@{ ViewData["Title"] = "Borrow Records"; }
+
+<h1>Borrow Records</h1>
+
+<div class="mb-3">
+    <a asp-controller="Borrow" asp-action="Create" class="btn btn-success me-2">+ Direct Borrow</a>
+    <a asp-controller="Borrow" asp-action="PendingRequests" class="btn btn-warning">Pending Requests</a>
+</div>
+
+<div class="mb-3">
+    <small class="text-muted">Books are due within 14 days from pickup date. Overdue returns automatically generate a fine of $1/day.</small>
+</div>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Id</th>
+            <th>Book</th>
+            <th>Member</th>
+            <th>Requested</th>
+            <th>Borrow Date</th>
+            <th>Return Date</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var record in Model)
+        {
+            <tr>
+                <td>@record.Id</td>
+                <td>@record.Book?.Title</td>
+                <td>@record.Member?.UserName</td>
+                <td>@record.RequestedDate.ToShortDateString()</td>
+                <td>@(record.BorrowDate?.ToShortDateString() ?? "-")</td>
+                <td>@(record.ReturnDate?.ToShortDateString() ?? "-")</td>
+                <td>
+                    @switch (record.Status)
+                    {
+                        case "Pending":
+                            <span class="badge bg-warning text-dark">Pending</span>
+                            break;
+                        case "Borrowed":
+                            <span class="badge bg-primary">Borrowed</span>
+                            break;
+                        case "Returned":
+                            <span class="badge bg-success">Returned</span>
+                            break;
+                        case "Overdue":
+                            <span class="badge bg-danger">Overdue</span>
+                            break;
+                        case "Rejected":
+                            <span class="badge bg-secondary">Rejected</span>
+                            break;
+                        default:
+                            <span class="badge bg-dark">@record.Status</span>
+                            break;
+                    }
+                </td>
+                <td>
+                    @if (record.Status == "Borrowed")
+                    {
+                        <form method="post" asp-controller="Borrow" asp-action="ReturnBook" asp-route-id="@record.Id" style="display:inline;">
+                            <button type="submit" class="btn btn-primary btn-sm">Return</button>
+                        </form>
+                    }
+                    else if (record.Status == "Overdue")
+                    {
+                        <form method="post" asp-controller="Borrow" asp-action="ReturnBook" asp-route-id="@record.Id" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">Return (Overdue)</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

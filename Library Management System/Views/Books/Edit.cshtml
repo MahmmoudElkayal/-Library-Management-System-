@@ -1,0 +1,29 @@
+@model BookEditViewModel
+@{ ViewData["Title"] = "Edit Book"; }
+
+<h1>Edit Book</h1>
+
+<form method="post" asp-controller="Books" asp-action="Edit" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="CurrentCoverImage" />
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <partial name="_BookForm" model="Model" />
+
+    @if (!string.IsNullOrEmpty(Model.CurrentCoverImage))
+    {
+        <div class="mb-3">
+            <label class="form-label">Current Cover</label>
+            <div>
+                <img src="~/images/books/@Model.CurrentCoverImage" alt="Current cover" style="width:100px;height:130px;object-fit:cover;" />
+            </div>
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-controller="Books" asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

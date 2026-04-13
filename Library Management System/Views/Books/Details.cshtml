@@ -1,0 +1,23 @@
+@model Book
+@{ ViewData["Title"] = "Book Details"; }
+
+<h1>Book Details</h1>
+
+<table class="table table-bordered">
+    <tr><th>Cover</th><td>
+        @if (!string.IsNullOrEmpty(Model.CoverImage))
+        {
+            <img src="~/images/books/@Model.CoverImage" alt="@Model.Title" style="width:120px;height:160px;object-fit:cover;" />
+        }
+        else
+        {
+            <span class="text-muted">No image</span>
+        }
+    </td></tr>
+    <tr><th>Title</th><td>@Model.Title</td></tr>
+    <tr><th>Author</th><td>@Model.Author?.Name</td></tr>
+    <tr><th>Category</th><td>@Model.Category?.Name</td></tr>
+    <tr><th>ISBN</th><td>@Model.ISBN</td></tr>
+</table>
+
+<a asp-controller="Books" asp-action="Index" class="btn btn-secondary">Back to List</a>

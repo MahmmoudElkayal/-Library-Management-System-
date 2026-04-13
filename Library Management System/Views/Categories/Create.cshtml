@@ -1,0 +1,17 @@
+@model CategoryAddViewModel
+@{ ViewData["Title"] = "Add Category"; }
+
+<h1>Add Category</h1>
+
+<form method="post" asp-controller="Categories" asp-action="Create">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <partial name="_CategoryForm" model="Model" />
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-controller="Categories" asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,17 @@
+@model AuthorAddViewModel
+@{ ViewData["Title"] = "Add Author"; }
+
+<h1>Add Author</h1>
+
+<form method="post" asp-controller="Authors" asp-action="Create">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <partial name="_AuthorForm" model="Model" />
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-controller="Authors" asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

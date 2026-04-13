@@ -1,0 +1,22 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace LibraryManagementSystem.Models
+{
+    public class Book
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string? ISBN { get; set; }
+        public string? CoverImage { get; set; }
+
+        public int AuthorId { get; set; }
+        [ForeignKey("AuthorId")]
+        public Author? Author { get; set; }
+
+        public int CategoryId { get; set; }
+        [ForeignKey("CategoryId")]
+        public Category? Category { get; set; }
+
+        public ICollection<BorrowRecord>? BorrowRecords { get; set; }
+    }
+}

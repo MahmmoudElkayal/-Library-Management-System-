@@ -1,0 +1,40 @@
+@model IEnumerable<BorrowRecord>
+@{ ViewData["Title"] = "Pending Requests"; }
+
+<h1>Pending Borrow Requests</h1>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No pending requests.</div>
+}
+else
+{
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Id</th>
+                <th>Book</th>
+                <th>Member</th>
+                <th>Requested Date</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var record in Model)
+            {
+                <tr>
+                    <td>@record.Id</td>
+                    <td>@record.Book?.Title</td>
+                    <td>@record.Member?.UserName</td>
+                    <td>@record.RequestedDate.ToShortDateString()</td>
+                    <td>
+                        <a asp-controller="Borrow" asp-action="Approve" asp-route-id="@record.Id" class="btn btn-success btn-sm">Approve</a>
+                        <form method="post" asp-controller="Borrow" asp-action="Reject" asp-route-id="@record.Id" style="display:inline;" onsubmit="return confirm('Are you sure you want to reject this request?')">
+                            <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

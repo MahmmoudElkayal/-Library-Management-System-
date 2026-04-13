@@ -1,0 +1,12 @@
+@model Author
+@{ ViewData["Title"] = "Author Details"; }
+
+<h1>Author Details</h1>
+
+<table class="table table-bordered">
+    <tr><th>Id</th><td>@Model.Id</td></tr>
+    <tr><th>Name</th><td>@Model.Name</td></tr>
+    <tr><th>Bio</th><td>@Model.Bio</td></tr>
+</table>
+
+<a asp-controller="Authors" asp-action="Index" class="btn btn-secondary">Back to List</a>

@@ -1,0 +1,59 @@
+@model IEnumerable<BorrowRecord>
+@{ ViewData["Title"] = "My Borrows"; }
+
+<h1>My Borrows</h1>
+
+<a asp-controller="Borrow" asp-action="RequestBook" class="btn btn-success mb-3">+ Request a Book</a>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">You have no borrow records yet.</div>
+}
+else
+{
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Book</th>
+                <th>Requested</th>
+                <th>Borrow Date</th>
+                <th>Return Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var record in Model)
+            {
+                <tr>
+                    <td>@record.Book?.Title</td>
+                    <td>@record.RequestedDate.ToShortDateString()</td>
+                    <td>@(record.BorrowDate?.ToShortDateString() ?? "-")</td>
+                    <td>@(record.ReturnDate?.ToShortDateString() ?? "-")</td>
+                    <td>
+                        @switch (record.Status)
+                        {
+                            case "Pending":
+                                <span class="badge bg-warning text-dark">Pending</span>
+                                break;
+                            case "Borrowed":
+                                <span class="badge bg-primary">Borrowed</span>
+                                break;
+                            case "Returned":
+                                <span class="badge bg-success">Returned</span>
+                                break;
+                            case "Overdue":
+                                <span class="badge bg-danger">Overdue</span>
+                                break;
+                            case "Rejected":
+                                <span class="badge bg-secondary">Rejected</span>
+                                break;
+                            default:
+                                <span class="badge bg-dark">@record.Status</span>
+                                break;
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

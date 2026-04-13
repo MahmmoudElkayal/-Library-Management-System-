@@ -1,0 +1,31 @@
+@model BorrowAddViewModel
+@{ ViewData["Title"] = "New Borrow"; }
+
+<h1>New Borrow</h1>
+
+<form method="post" asp-controller="Borrow" asp-action="Create">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="BookId" class="form-label"></label>
+        <select asp-for="BookId" class="form-control" asp-items="@(new SelectList(Model.Books, "Id", "Title"))">
+            <option value="">-- Select Book --</option>
+        </select>
+        <span asp-validation-for="BookId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="MemberId" class="form-label"></label>
+        <select asp-for="MemberId" class="form-control" asp-items="@(new SelectList(Model.Members, "Id", "UserName"))">
+            <option value="">-- Select Member --</option>
+        </select>
+        <span asp-validation-for="MemberId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Borrow Book</button>
+    <a asp-controller="Borrow" asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
