@@ -1,47 +1,120 @@
 @model IEnumerable<Fine>
 @{ ViewData["Title"] = "Fines"; }
 
-<h1>Fines</h1>
-<a asp-controller="Fines" asp-action="Create" class="btn btn-success mb-3">+ Add New Fine</a>
+<div class="fines-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">
+            <i class="fas fa-dollar-sign text-terracotta"></i> Fines Management
+        </h1>
+        <a asp-controller="Fines" asp-action="Create" class="btn btn-success">
+            <i class="fas fa-plus"></i> Add New Fine
+        </a>
+    </div>
 
-<table class="table table-bordered table-hover">
-    <thead class="table-dark">
-        <tr>
-            <th>Id</th>
-            <th>Member</th>
-            <th>Borrow Record</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var fine in Model)
-        {
-            <tr>
-                <td>@fine.Id</td>
-                <td>@fine.Member?.UserName</td>
-                <td>#@fine.BorrowRecordId</td>
-                <td>@fine.Amount.ToString("C")</td>
-                <td>
-                    @if (fine.IsPaid)
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="fines-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Member</th>
+                        <th>Borrow Record</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var fine in Model)
                     {
-                        <span class="badge bg-success">Paid</span>
+                        <tr>
+                            <td><strong>#@fine.Id</strong></td>
+                            <td>
+                                <i class="fas fa-user text-muted me-1"></i>
+                                @fine.Member?.UserName
+                            </td>
+                            <td>
+                                <i class="fas fa-book text-muted me-1"></i>
+                                Record #@fine.BorrowRecordId
+                            </td>
+                            <td>
+                                <span class="fw-bold text-terracotta">@fine.Amount.ToString("C")</span>
+                            </td>
+                            <td>
+                                @if (fine.IsPaid)
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-check-circle me-1"></i> Paid
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">
+                                        <i class="fas fa-times-circle me-1"></i> Unpaid
+                                    </span>
+                                }
+                            </td>
+                            <td>
+                                @if (!fine.IsPaid)
+                                {
+                                    <form method="post" asp-controller="Fines" asp-action="MarkPaid" asp-route-id="@fine.Id" style="display:inline;">
+                                        <button type="submit" class="btn btn-success btn-sm">
+                                            <i class="fas fa-check"></i> Mark Paid
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        <i class="fas fa-check-double"></i> Resolved
+                                    </span>
+                                }
+                            </td>
+                        </tr>
                     }
-                    else
-                    {
-                        <span class="badge bg-danger">Unpaid</span>
-                    }
-                </td>
-                <td>
-                    @if (!fine.IsPaid)
-                    {
-                        <form method="post" asp-controller="Fines" asp-action="MarkPaid" asp-route-id="@fine.Id" style="display:inline;">
-                            <button type="submit" class="btn btn-success btn-sm">Mark Paid</button>
-                        </form>
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="fines-summary mt-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="summary-card">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <div class="summary-info">
+                            <span class="summary-value">@Model.Count()</span>
+                            <span class="summary-label">Total Fines</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="summary-card unpaid">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div class="summary-info">
+                            <span class="summary-value">@Model.Count(f => !f.IsPaid)</span>
+                            <span class="summary-label">Unpaid</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="summary-card paid">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="summary-info">
+                            <span class="summary-value">@Model.Where(f => f.IsPaid).Sum(f => f.Amount).ToString("C")</span>
+                            <span class="summary-label">Collected</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <i class="fas fa-check-circle"></i>
+            <h3>No Fines Recorded</h3>
+            <p>There are no fines in the system. Great job!</p>
+        </div>
+    }
+</div>
