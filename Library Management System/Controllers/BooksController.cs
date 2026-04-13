@@ -4,6 +4,7 @@ using LibraryManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace LibraryManagementSystem.Controllers
 {
@@ -22,10 +23,43 @@ namespace LibraryManagementSystem.Controllers
             this.env = env;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string? searchString, int? categoryId, int? authorId, string? sortOrder, string? viewMode, int page = 1)
         {
-            List<Book> books = bookRepo.GetAllWithDetails();
-            return View("Index", books);
+            var books = bookRepo.SearchBooks(searchString, categoryId, authorId);
+
+            // Apply sorting
+            books = sortOrder switch
+            {
+                "title_desc" => books.OrderByDescending(b => b.Title).ToList(),
+                "author" => books.OrderBy(b => b.Author?.Name).ToList(),
+                "author_desc" => books.OrderByDescending(b => b.Author?.Name).ToList(),
+                "category" => books.OrderBy(b => b.Category?.Name).ToList(),
+                _ => books.OrderBy(b => b.Title).ToList()
+            };
+
+            var totalBooks = books.Count;
+            var availableBooks = bookRepo.GetAvailableBooks().Count;
+
+            // Apply pagination
+            books = books.Skip((page - 1) * 12).Take(12).ToList();
+
+            var viewModel = new BookCatalogViewModel
+            {
+                Books = books,
+                Categories = categoryRepo.GetAll().Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name }).ToList(),
+                Authors = authorRepo.GetAll().Select(a => new SelectListItem { Value = a.Id.ToString(), Text = a.Name }).ToList(),
+                SearchString = searchString,
+                SelectedCategoryId = categoryId,
+                SelectedAuthorId = authorId,
+                SortOrder = sortOrder,
+                ViewMode = viewMode ?? "grid",
+                TotalBooks = totalBooks,
+                AvailableBooks = availableBooks,
+                CurrentPage = page,
+                PageSize = 12
+            };
+
+            return View("Index", viewModel);
         }
 
         public IActionResult Details(int id)

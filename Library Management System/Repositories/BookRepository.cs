@@ -34,5 +34,68 @@ namespace LibraryManagementSystem.Repositories
         }
 
         public void Save() => context.SaveChanges();
+
+        public List<Book> SearchBooks(string? searchString, int? categoryId, int? authorId)
+        {
+            var query = context.Books
+                .Include(b => b.Author)
+                .Include(b => b.Category)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                searchString = searchString.ToLower();
+                query = query.Where(b => 
+                    b.Title.ToLower().Contains(searchString) ||
+                    (b.Author != null && b.Author.Name.ToLower().Contains(searchString)) ||
+                    (b.Category != null && b.Category.Name.ToLower().Contains(searchString)) ||
+                    (b.ISBN != null && b.ISBN.Contains(searchString)));
+            }
+
+            if (categoryId.HasValue && categoryId.Value > 0)
+            {
+                query = query.Where(b => b.CategoryId == categoryId.Value);
+            }
+
+            if (authorId.HasValue && authorId.Value > 0)
+            {
+                query = query.Where(b => b.AuthorId == authorId.Value);
+            }
+
+            return query.ToList();
+        }
+
+        public List<Book> GetBooksByCategory(int categoryId)
+        {
+            return context.Books
+                .Include(b => b.Author)
+                .Include(b => b.Category)
+                .Where(b => b.CategoryId == categoryId)
+                .ToList();
+        }
+
+        public List<Book> GetAvailableBooks()
+        {
+            var borrowedBookIds = context.BorrowRecords
+                .Where(br => br.ReturnDate == null)
+                .Select(br => br.BookId)
+                .ToList();
+
+            return context.Books
+                .Include(b => b.Author)
+                .Include(b => b.Category)
+                .Where(b => !borrowedBookIds.Contains(b.Id))
+                .ToList();
+        }
+
+        public List<Book> GetRecentlyAdded(int count)
+        {
+            return context.Books
+                .Include(b => b.Author)
+                .Include(b => b.Category)
+                .OrderByDescending(b => b.Id)
+                .Take(count)
+                .ToList();
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace LibraryManagementSystem.Controllers
 
         public IActionResult Index()
         {
-            var books = bookRepo.GetAllWithDetails();
+            var books = bookRepo.GetRecentlyAdded(8);
             return View(books);
         }
 

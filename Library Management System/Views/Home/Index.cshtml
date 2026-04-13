@@ -1,35 +1,187 @@
 @model IEnumerable<Book>
-@{ ViewData["Title"] = "Home"; }
+@{ 
+    ViewData["Title"] = "Home Page";
+}
 
-<div class="text-center mb-4">
-    <h1 class="display-4">Library Management System</h1>
-    <p class="lead">Browse our collection of books</p>
-</div>
-
-<div class="row">
-    @foreach (var book in Model)
-    {
-        <div class="col-md-3 mb-4">
-            <div class="card h-100">
-                @if (!string.IsNullOrEmpty(book.CoverImage))
-                {
-                    <img src="~/images/books/@book.CoverImage" class="card-img-top" alt="@book.Title" style="height:200px;object-fit:cover;" />
-                }
-                else
-                {
-                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height:200px;">
-                        <span class="text-muted">No Image</span>
+<!-- Featured Books Section -->
+<section class="featured-books-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">
+                <i class="fas fa-fire"></i> Featured Books
+            </h2>
+            <p class="section-subtitle">Hand-picked selections from our librarians</p>
+        </div>
+        
+        <div class="featured-grid">
+            @foreach (var book in Model.Take(4))
+            {
+                <div class="featured-card">
+                    <div class="featured-image">
+                        @if (!string.IsNullOrEmpty(book.CoverImage))
+                        {
+                            <img src="~/images/books/@book.CoverImage" alt="@book.Title" loading="lazy" />
+                        }
+                        else
+                        {
+                            <div class="featured-placeholder">
+                                <i class="fas fa-book"></i>
+                            </div>
+                        }
+                        <div class="featured-overlay">
+                            <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" class="btn btn-light">
+                                <i class="fas fa-eye"></i> Quick View
+                            </a>
+                        </div>
                     </div>
-                }
-                <div class="card-body">
-                    <h5 class="card-title">@book.Title</h5>
-                    <p class="card-text text-muted">@book.Author?.Name</p>
-                    <span class="badge bg-info">@book.Category?.Name</span>
+                    <div class="featured-info">
+                        <span class="featured-category">@book.Category?.Name</span>
+                        <h3 class="featured-title">@book.Title</h3>
+                        <p class="featured-author">by @book.Author?.Name</p>
+                    </div>
                 </div>
-                <div class="card-footer">
-                    <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" class="btn btn-primary btn-sm w-100">View Details</a>
+            }
+        </div>
+        
+        <div class="text-center mt-4">
+            <a asp-controller="Books" asp-action="Index" class="btn btn-primary btn-lg">
+                <i class="fas fa-th"></i> Browse Full Catalog
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="categories-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">
+                <i class="fas fa-folder-open"></i> Browse by Category
+            </h2>
+            <p class="section-subtitle">Find books that match your interests</p>
+        </div>
+        
+        <div class="categories-grid">
+            <a asp-controller="Books" asp-action="Index" asp-route-categoryId="1" class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-rocket"></i>
                 </div>
+                <h3>Fiction</h3>
+                <p>Immerse yourself in stories</p>
+            </a>
+            <a asp-controller="Books" asp-action="Index" asp-route-categoryId="2" class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <h3>Science</h3>
+                <p>Explore the wonders of science</p>
+            </a>
+            <a asp-controller="Books" asp-action="Index" asp-route-categoryId="3" class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-history"></i>
+                </div>
+                <h3>History</h3>
+                <p>Learn from the past</p>
+            </a>
+            <a asp-controller="Books" asp-action="Index" class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-ellipsis-h"></i>
+                </div>
+                <h3>All Categories</h3>
+                <p>Browse everything</p>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="how-it-works-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">
+                <i class="fas fa-magic"></i> How It Works
+            </h2>
+            <p class="section-subtitle">Borrowing books is easy as 1-2-3</p>
+        </div>
+        
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <div class="step-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3>Find a Book</h3>
+                <p>Browse our extensive catalog and find the perfect book for your next read.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <div class="step-icon">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <h3>Sign In</h3>
+                <p>Create an account or sign in to request books and manage your loans.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <div class="step-icon">
+                    <i class="fas fa-hand-holding-heart"></i>
+                </div>
+                <h3>Borrow & Enjoy</h3>
+                <p>Pick up your book at the library and enjoy reading! Return when done.</p>
             </div>
         </div>
-    }
-</div>
+        
+        @if (User.Identity?.IsAuthenticated != true)
+        {
+            <div class="text-center mt-5">
+                <a asp-controller="Account" asp-action="Register" class="btn btn-primary btn-lg">
+                    <i class="fas fa-user-plus"></i> Get Started Today
+                </a>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- Library Features Section -->
+<section class="features-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">
+                <i class="fas fa-star"></i> Why Choose Our Library
+            </h2>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-item">
+                <i class="fas fa-book-reader"></i>
+                <h4>Vast Collection</h4>
+                <p>Thousands of books across all genres and categories</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-clock"></i>
+                <h4>Flexible Hours</h4>
+                <p>Open 7 days a week with extended evening hours</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-wifi"></i>
+                <h4>Free WiFi</h4>
+                <p>Stay connected while you read and study</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-coffee"></i>
+                <h4>Reading Cafe</h4>
+                <p>Enjoy complimentary coffee while browsing</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-laptop"></i>
+                <h4>Digital Resources</h4>
+                <p>Access e-books and online databases</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-users"></i>
+                <h4>Community Events</h4>
+                <p>Book clubs, readings, and workshops</p>
+            </div>
+        </div>
+    </div>
+</section>
