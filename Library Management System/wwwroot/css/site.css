@@ -572,6 +572,45 @@ textarea:focus {
   font-size: 0.9rem;
 }
 
+.book-card-image {
+  position: relative;
+  height: 200px;
+  background-color: var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.book-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.no-cover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-500);
+  height: 100%;
+}
+
+.no-cover i {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.book-card-meta {
+  margin-top: var(--spacing-sm);
+}
+
+.book-card-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+}
+
 .carousel-controls {
   display: flex;
   justify-content: center;

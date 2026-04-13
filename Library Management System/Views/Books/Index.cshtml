@@ -8,49 +8,43 @@
     <a asp-controller="Books" asp-action="Create" class="btn btn-success mb-3">+ Add New Book</a>
 }
 
-<table class="table table-bordered table-hover">
-    <thead class="table-dark">
-        <tr>
-            <th>Cover</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Category</th>
-            <th>ISBN</th>
-            @if (User.IsInRole("Admin"))
-            {
-                <th></th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var book in Model)
-        {
-            <tr>
-                <td>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    @foreach (var book in Model)
+    {
+        <div class="col">
+            <div class="book-card h-100">
+                <div class="book-card-image">
                     @if (!string.IsNullOrEmpty(book.CoverImage))
                     {
-                        <img src="~/images/books/@book.CoverImage" alt="@book.Title" style="width:60px;height:80px;object-fit:cover;" />
+                        <img src="~/images/books/@book.CoverImage" alt="@book.Title" class="card-img-top">
                     }
                     else
                     {
-                        <span class="text-muted">No image</span>
+                        <div class="no-cover">
+                            <i class="fas fa-book"></i>
+                            <span>No Cover</span>
+                        </div>
                     }
-                </td>
-                <td>@book.Title</td>
-                <td>@book.Author?.Name</td>
-                <td>@book.Category?.Name</td>
-                <td>@book.ISBN</td>
-                @if (User.IsInRole("Admin"))
-                {
-                    <td>
-                        <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" class="btn btn-primary btn-sm">Details</a>
-                        <a asp-controller="Books" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-warning btn-sm">Edit</a>
-                        <form method="post" asp-controller="Books" asp-action="Delete" asp-route-id="@book.Id" style="display:inline;" onsubmit="return confirm('Are you sure?')">
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        </form>
-                    </td>
-                }
-            </tr>
-        }
-    </tbody>
-</table>
+                </div>
+                <div class="book-card-content">
+                    <h5 class="book-card-title">@book.Title</h5>
+                    <p class="book-card-author">by @book.Author?.Name</p>
+                    <div class="book-card-meta">
+                        <span class="badge bg-secondary">@book.Category?.Name</span>
+                        <small class="text-muted d-block mt-1">ISBN: @book.ISBN</small>
+                    </div>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="book-card-actions mt-3">
+                            <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" class="btn btn-primary btn-sm">Details</a>
+                            <a asp-controller="Books" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-warning btn-sm">Edit</a>
+                            <form method="post" asp-controller="Books" asp-action="Delete" asp-route-id="@book.Id" class="d-inline" onsubmit="return confirm('Are you sure?')">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
