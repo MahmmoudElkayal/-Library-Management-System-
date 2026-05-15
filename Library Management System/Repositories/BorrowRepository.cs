@@ -28,7 +28,7 @@ namespace LibraryManagementSystem.Repositories
 
         public List<BorrowRecord> GetPendingRequests() =>
             context.BorrowRecords.Include(br => br.Book).Include(br => br.Member)
-                .Where(br => br.Status == "Pending").ToList();
+                .Where(br => br.Status == BorrowStatus.Pending).ToList();
 
         public void Add(BorrowRecord entity) => context.BorrowRecords.Add(entity);
         public void Update(BorrowRecord entity) => context.BorrowRecords.Update(entity);

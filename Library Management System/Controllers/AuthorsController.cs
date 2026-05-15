@@ -106,9 +106,17 @@ namespace LibraryManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
-            authorRepo.Delete(id);
-            authorRepo.Save();
-            TempData["Success"] = "Author deleted successfully";
+            Author? author = authorRepo.GetById(id);
+            if (author != null)
+            {
+                authorRepo.Delete(id);
+                authorRepo.Save();
+                TempData["Success"] = "Author deleted successfully";
+            }
+            else
+            {
+                TempData["Error"] = "Author not found";
+            }
             return RedirectToAction("Index");
         }
     }

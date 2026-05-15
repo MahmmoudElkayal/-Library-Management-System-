@@ -7,7 +7,7 @@ namespace LibraryManagementSystem.ViewModels
     {
         [Required(ErrorMessage = "Please select a member")]
         [Display(Name = "Member")]
-        public string MemberId { get; set; }
+        public string MemberId { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Please select a borrow record")]
         [Display(Name = "Borrow Record")]

@@ -66,19 +66,30 @@ namespace LibraryManagementSystem.Controllers
                 try
                 {
                     var memberId = userManager.GetUserId(User) ?? "";
-                    BorrowRecord record = new BorrowRecord
+
+                    var existingRecord = borrowRepo.GetAll()
+                        .FirstOrDefault(br => br.BookId == vm.BookId && br.MemberId == memberId
+                            && (br.Status == BorrowStatus.Pending || br.Status == BorrowStatus.Borrowed));
+                    if (existingRecord != null)
                     {
-                        BookId = vm.BookId,
-                        MemberId = memberId,
-                        RequestedDate = DateTime.Now,
-                        BorrowDate = null,
-                        ReturnDate = null,
-                        Status = "Pending"
-                    };
-                    borrowRepo.Add(record);
-                    borrowRepo.Save();
-                    TempData["Success"] = "Borrow request submitted successfully. An admin will review it shortly.";
-                    return RedirectToAction("MyBorrows");
+                        ModelState.AddModelError("", "You already have a pending or active borrow for this book.");
+                    }
+                    else
+                    {
+                        BorrowRecord record = new BorrowRecord
+                        {
+                            BookId = vm.BookId,
+                            MemberId = memberId,
+                            RequestedDate = DateTime.Now,
+                            BorrowDate = null,
+                            ReturnDate = null,
+                            Status = BorrowStatus.Pending
+                        };
+                        borrowRepo.Add(record);
+                        borrowRepo.Save();
+                        TempData["Success"] = "Borrow request submitted successfully. An admin will review it shortly.";
+                        return RedirectToAction("MyBorrows");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -97,7 +108,7 @@ namespace LibraryManagementSystem.Controllers
             BorrowRecord? record = borrowRepo.GetByIdWithDetails(id);
             if (record == null) return NotFound();
 
-            if (record.Status != "Pending")
+            if (record.Status != BorrowStatus.Pending)
             {
                 TempData["Error"] = "This request has already been processed.";
                 return RedirectToAction("PendingRequests");
@@ -126,14 +137,14 @@ namespace LibraryManagementSystem.Controllers
                     BorrowRecord? record = borrowRepo.GetById(vm.Id);
                     if (record == null) return NotFound();
 
-                    if (record.Status != "Pending")
+                    if (record.Status != BorrowStatus.Pending)
                     {
                         TempData["Error"] = "This request has already been processed.";
                         return RedirectToAction("PendingRequests");
                     }
 
                     record.BorrowDate = vm.PickupDate;
-                    record.Status = "Borrowed";
+                    record.Status = BorrowStatus.Borrowed;
                     borrowRepo.Update(record);
                     borrowRepo.Save();
                     TempData["Success"] = "Borrow request approved successfully.";
@@ -160,13 +171,13 @@ namespace LibraryManagementSystem.Controllers
             BorrowRecord? record = borrowRepo.GetById(id);
             if (record == null) return NotFound();
 
-            if (record.Status != "Pending")
+            if (record.Status != BorrowStatus.Pending)
             {
                 TempData["Error"] = "This request has already been processed.";
                 return RedirectToAction("PendingRequests");
             }
 
-            record.Status = "Rejected";
+            record.Status = BorrowStatus.Rejected;
             borrowRepo.Update(record);
             borrowRepo.Save();
             TempData["Success"] = "Borrow request rejected.";
@@ -200,7 +211,7 @@ namespace LibraryManagementSystem.Controllers
                         MemberId = vm.MemberId,
                         RequestedDate = DateTime.Now,
                         BorrowDate = DateTime.Now,
-                        Status = "Borrowed"
+                        Status = BorrowStatus.Borrowed
                     };
                     borrowRepo.Add(record);
                     borrowRepo.Save();
@@ -238,7 +249,7 @@ namespace LibraryManagementSystem.Controllers
                     var overdueDays = (now - dueDate).Days;
                     decimal fineAmount = overdueDays * 1m;
 
-                    record.Status = "Overdue";
+                    record.Status = BorrowStatus.Overdue;
                     borrowRepo.Update(record);
                     borrowRepo.Save();
 
@@ -256,7 +267,7 @@ namespace LibraryManagementSystem.Controllers
                 }
                 else
                 {
-                    record.Status = "Returned";
+                    record.Status = BorrowStatus.Returned;
                     borrowRepo.Update(record);
                     borrowRepo.Save();
                     TempData["Success"] = "Book returned successfully.";
@@ -264,7 +275,7 @@ namespace LibraryManagementSystem.Controllers
             }
             else
             {
-                record.Status = "Returned";
+                record.Status = BorrowStatus.Returned;
                 borrowRepo.Update(record);
                 borrowRepo.Save();
                 TempData["Success"] = "Book returned successfully.";

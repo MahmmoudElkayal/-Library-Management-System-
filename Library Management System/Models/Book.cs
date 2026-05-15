@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LibraryManagementSystem.Models
@@ -5,7 +6,9 @@ namespace LibraryManagementSystem.Models
     public class Book
     {
         public int Id { get; set; }
-        public string Title { get; set; }
+
+        [Required]
+        public string Title { get; set; } = string.Empty;
         public string? ISBN { get; set; }
         public string? CoverImage { get; set; }
 

@@ -14,10 +14,12 @@ builder.Services.AddDbContext<LibraryDbContext>(options =>
 
 builder.Services.AddIdentity<LibraryMember, IdentityRole>(options =>
 {
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireDigit = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequiredLength = 4;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireDigit = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequiredUniqueChars = 2;
 }).AddEntityFrameworkStores<LibraryDbContext>();
 
 builder.Services.AddSession(options =>
@@ -40,36 +42,7 @@ if (!app.Environment.IsDevelopment())
 
 using (var scope = app.Services.CreateScope())
 {
-    try
-    {
-        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<LibraryMember>>();
-
-        string[] roles = { "Admin", "Member" };
-        foreach (var role in roles)
-        {
-            if (!roleManager.RoleExistsAsync(role).GetAwaiter().GetResult())
-            {
-                roleManager.CreateAsync(new IdentityRole(role)).GetAwaiter().GetResult();
-            }
-        }
-
-        var adminUser = userManager.FindByNameAsync("admin").GetAwaiter().GetResult();
-        if (adminUser == null)
-        {
-            adminUser = new LibraryMember { UserName = "admin", Email = "admin@library.local" };
-            var result = userManager.CreateAsync(adminUser, "Admin@123").GetAwaiter().GetResult();
-            if (result.Succeeded)
-            {
-                userManager.AddToRoleAsync(adminUser, "Admin").GetAwaiter().GetResult();
-            }
-        }
-    }
-    catch (Exception ex)
-    {
-        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while seeding the database.");
-    }
+    await SeedDatabaseAsync(scope.ServiceProvider, builder.Configuration);
 }
 
 app.UseStaticFiles();
@@ -83,3 +56,38 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+static async Task SeedDatabaseAsync(IServiceProvider serviceProvider, IConfiguration configuration)
+{
+    try
+    {
+        var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager = serviceProvider.GetRequiredService<UserManager<LibraryMember>>();
+
+        string[] roles = { "Admin", "Member" };
+        foreach (var role in roles)
+        {
+            if (!await roleManager.RoleExistsAsync(role))
+            {
+                await roleManager.CreateAsync(new IdentityRole(role));
+            }
+        }
+
+        var adminUser = await userManager.FindByNameAsync("admin");
+        if (adminUser == null)
+        {
+            adminUser = new LibraryMember { UserName = "admin", Email = "admin@library.local" };
+            var adminPassword = configuration["AdminPassword"] ?? throw new InvalidOperationException("AdminPassword not configured. Set the AdminPassword environment variable or app setting.");
+            var result = await userManager.CreateAsync(adminUser, adminPassword);
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(adminUser, "Admin");
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while seeding the database.");
+    }
+}

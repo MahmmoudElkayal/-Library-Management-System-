@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LibraryManagementSystem.Models
@@ -12,7 +13,8 @@ namespace LibraryManagementSystem.Models
         [ForeignKey("BorrowRecordId")]
         public BorrowRecord? BorrowRecord { get; set; }
 
-        public string MemberId { get; set; }
+        [Required]
+        public string MemberId { get; set; } = string.Empty;
         [ForeignKey("MemberId")]
         public LibraryMember? Member { get; set; }
     }

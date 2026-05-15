@@ -1,5 +1,5 @@
 @{
-    if (User?.IsInRole("Admin") == true)
+    if (User?.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
     {
         Layout = "_AdminLayout";
     }

@@ -16,7 +16,7 @@ namespace LibraryManagementSystem.Repositories
         public List<Fine> GetAll() => context.Fines.ToList();
 
         public List<Fine> GetByMemberId(string memberId) =>
-            context.Fines.Include(f => f.BorrowRecord).ThenInclude(f => f.Book).Where(f => f.MemberId == memberId).ToList();
+            context.Fines.Include(f => f.BorrowRecord).ThenInclude(br => br!.Book).Where(f => f.MemberId == memberId).ToList();
 
         public Fine? GetById(int id) => context.Fines.FirstOrDefault(f => f.Id == id);
         public void Add(Fine entity) => context.Fines.Add(entity);

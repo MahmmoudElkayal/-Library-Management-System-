@@ -11,7 +11,7 @@ namespace LibraryManagementSystem.ViewModels
 
         [Required(ErrorMessage = "Please select a member")]
         [Display(Name = "Member")]
-        public string MemberId { get; set; }
+        public string MemberId { get; set; } = string.Empty;
 
         public List<Book>? Books { get; set; }
         public List<LibraryMember>? Members { get; set; }

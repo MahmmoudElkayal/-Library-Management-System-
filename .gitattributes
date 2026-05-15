@@ -1,0 +1,21 @@
+* text=auto eol=crlf
+
+*.cs text eol=crlf
+*.cshtml text eol=crlf
+*.css text eol=crlf
+*.js text eol=crlf
+*.json text eol=crlf
+*.xml text eol=crlf
+
+*.sh text eol=lf
+*.ps1 text eol=crlf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary

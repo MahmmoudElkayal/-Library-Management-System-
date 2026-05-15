@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using LibraryManagementSystem.Attributes;
 using Microsoft.AspNetCore.Http;
 
 namespace LibraryManagementSystem.ViewModels
@@ -7,7 +8,7 @@ namespace LibraryManagementSystem.ViewModels
     {
         [Required(ErrorMessage = "Username is required")]
         [Display(Name = "Username")]
-        public string UserName { get; set; }
+        public string UserName { get; set; } = string.Empty;
 
         [EmailAddress]
         [Display(Name = "Email")]
@@ -17,6 +18,7 @@ namespace LibraryManagementSystem.ViewModels
         public string? Address { get; set; }
 
         [Display(Name = "Profile Image")]
+        [AllowedFileExtensions(ErrorMessage = "Only .jpg, .jpeg, .png, .gif files under 2MB are allowed.")]
         public IFormFile? ProfileImage { get; set; }
 
         public string? CurrentProfileImage { get; set; }

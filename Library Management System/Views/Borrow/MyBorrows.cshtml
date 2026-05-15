@@ -32,19 +32,19 @@ else
                     <td>
                         @switch (record.Status)
                         {
-                            case "Pending":
+                            case BorrowStatus.Pending:
                                 <span class="badge bg-warning text-dark">Pending</span>
                                 break;
-                            case "Borrowed":
+                            case BorrowStatus.Borrowed:
                                 <span class="badge bg-primary">Borrowed</span>
                                 break;
-                            case "Returned":
+                            case BorrowStatus.Returned:
                                 <span class="badge bg-success">Returned</span>
                                 break;
-                            case "Overdue":
+                            case BorrowStatus.Overdue:
                                 <span class="badge bg-danger">Overdue</span>
                                 break;
-                            case "Rejected":
+                            case BorrowStatus.Rejected:
                                 <span class="badge bg-secondary">Rejected</span>
                                 break;
                             default:

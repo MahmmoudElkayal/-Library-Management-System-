@@ -38,19 +38,19 @@
                 <td>
                     @switch (record.Status)
                     {
-                        case "Pending":
+                        case BorrowStatus.Pending:
                             <span class="badge bg-warning text-dark">Pending</span>
                             break;
-                        case "Borrowed":
+                        case BorrowStatus.Borrowed:
                             <span class="badge bg-primary">Borrowed</span>
                             break;
-                        case "Returned":
+                        case BorrowStatus.Returned:
                             <span class="badge bg-success">Returned</span>
                             break;
-                        case "Overdue":
+                        case BorrowStatus.Overdue:
                             <span class="badge bg-danger">Overdue</span>
                             break;
-                        case "Rejected":
+                        case BorrowStatus.Rejected:
                             <span class="badge bg-secondary">Rejected</span>
                             break;
                         default:
@@ -59,13 +59,13 @@
                     }
                 </td>
                 <td>
-                    @if (record.Status == "Borrowed")
+                    @if (record.Status == BorrowStatus.Borrowed)
                     {
                         <form method="post" asp-controller="Borrow" asp-action="ReturnBook" asp-route-id="@record.Id" style="display:inline;">
                             <button type="submit" class="btn btn-primary btn-sm">Return</button>
                         </form>
                     }
-                    else if (record.Status == "Overdue")
+                    else if (record.Status == BorrowStatus.Overdue)
                     {
                         <form method="post" asp-controller="Borrow" asp-action="ReturnBook" asp-route-id="@record.Id" style="display:inline;">
                             <button type="submit" class="btn btn-danger btn-sm">Return (Overdue)</button>

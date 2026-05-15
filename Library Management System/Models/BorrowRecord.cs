@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LibraryManagementSystem.Models
@@ -8,9 +9,12 @@ namespace LibraryManagementSystem.Models
         public DateTime? BorrowDate { get; set; }
         public DateTime? ReturnDate { get; set; }
         public DateTime RequestedDate { get; set; }
-        public string Status { get; set; }
 
-        public string MemberId { get; set; }
+        [Required]
+        public BorrowStatus Status { get; set; }
+
+        [Required]
+        public string MemberId { get; set; } = string.Empty;
         [ForeignKey("MemberId")]
         public LibraryMember? Member { get; set; }
 

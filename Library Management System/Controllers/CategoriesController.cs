@@ -106,9 +106,17 @@ namespace LibraryManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
-            categoryRepo.Delete(id);
-            categoryRepo.Save();
-            TempData["Success"] = "Category deleted successfully";
+            Category? category = categoryRepo.GetById(id);
+            if (category != null)
+            {
+                categoryRepo.Delete(id);
+                categoryRepo.Save();
+                TempData["Success"] = "Category deleted successfully";
+            }
+            else
+            {
+                TempData["Error"] = "Category not found";
+            }
             return RedirectToAction("Index");
         }
     }
